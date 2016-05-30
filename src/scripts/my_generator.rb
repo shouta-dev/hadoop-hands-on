@@ -7,7 +7,7 @@ class MyGen < LogGenerator::Apache
   def initialize
     super
     @arr = []
-    CSV.foreach("src/main/resources/userdata.csv") do | row |
+    CSV.foreach("#{File.dirname(__FILE__)}/../../src/main/resources/userdata.csv") do | row |
       @arr << row[9]
     end
   end
