@@ -2,7 +2,7 @@ require 'apache-loggen/base'
 require 'digest/sha1'
 require 'csv'
 
-class MyGen < LogGenerator::Apache
+class MyGenerator < LogGenerator::Apache
 
   def initialize
     super
@@ -18,4 +18,4 @@ class MyGen < LogGenerator::Apache
   end
 end
 
-LogGenerator.generate(nil, MyGen.new)
+LogGenerator.generate(nil, MyGenerator.new)
