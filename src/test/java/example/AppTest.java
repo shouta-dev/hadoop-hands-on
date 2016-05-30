@@ -18,8 +18,8 @@ import org.junit.Test;
 
 public class AppTest {
 
-    private String s1 = "40.129.132.147 - - [26/May/2016:14:50:30 +0900] \"GET /category/cameras?from=0 HTTP/1.1\" 200 108 \"/search/?c=Cameras\" \"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11\"";
-    private String s2 = "120.222.144.140 - - [26/May/2016:14:50:30 +0900] \"GET /category/jewelry HTTP/1.1\" 200 67 \"-\" \"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; BTRS122159; GTB7.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; BRI/2)\"";
+    private String s1 = "10.20.30.40 - ID_HASH [26/May/2016:14:50:30 +0900] \"GET /category/cameras?from=0 HTTP/1.1\" 200 123 \"-\" \"USER_AGENT\"";
+    private String s2 = "10.20.30.40 - ID_HASH [26/May/2016:14:50:30 +0900] \"GET /category/jewelry HTTP/1.1\" 200 123 \"-\" \"USER_AGENT\"";
     
     private Mapper<LongWritable, Text, Text, IntWritable> mapper;
     private Reducer<Text, IntWritable, Text, IntWritable> reducer;

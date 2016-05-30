@@ -15,8 +15,11 @@ public class MyMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
     protected void map(LongWritable key, Text value, Mapper<LongWritable, Text, Text, IntWritable>.Context context)
             throws IOException, InterruptedException {
         
-        String url = Parser.getUrl(value.toString());
+        AccessLog log = AccessLog.parse(value.toString());
         
-        context.write(new Text(url), one);
+        if (!log.isGetMethod() || !log.isOkStatus()) {
+            return;
+        }
+        context.write(new Text(log.getUrl()), one);
     }
 }

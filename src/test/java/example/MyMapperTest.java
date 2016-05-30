@@ -16,8 +16,10 @@ import org.junit.Test;
 
 public class MyMapperTest {
 
-    private String s1 = "40.129.132.147 - - [26/May/2016:14:50:30 +0900] \"GET /category/cameras?from=0 HTTP/1.1\" 200 108 \"/search/?c=Cameras\" \"Mozilla/5.0 (Windows NT 5.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.46 Safari/535.11\"";
-    private String s2 = "120.222.144.140 - - [26/May/2016:14:50:30 +0900] \"GET /category/jewelry HTTP/1.1\" 200 67 \"-\" \"Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.1; Trident/4.0; BTRS122159; GTB7.2; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.30; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; BRI/2)\"";
+    private String s1 = "10.20.30.40 - ID_HASH [26/May/2016:14:50:30 +0900] \"GET /category/cameras?from=0 HTTP/1.1\" 200 123 \"-\" \"USER_AGENT\"";
+    private String s2 = "10.20.30.40 - ID_HASH [26/May/2016:14:50:30 +0900] \"GET /category/jewelry HTTP/1.1\" 200 123 \"-\" \"USER_AGENT\"";
+    private String s3 = "10.20.30.40 - ID_HASH [30/May/2016:14:09:25 +0900] \"POST /search/?c=Health HTTP/1.1\" 200 123 \"-\" \"USER_AGENT\"";
+    private String s4 = "10.20.30.40 - ID_HASH [30/May/2016:14:09:25 +0900] \"GET /item/software/637 HTTP/1.1\" 404 123 \"-\" \"USER_AGENT\"";
     
     private MapDriver<LongWritable, Text, Text, IntWritable> driver;
     
@@ -80,6 +82,36 @@ public class MyMapperTest {
         
         result = results.get(2);
         assertThat(result.getFirst().toString(), is("/category/jewelry"));
+        assertThat(result.getSecond().get(), is(1));
+    }
+    
+    @Test
+    public void GETメソッド以外は除外() throws IOException {
+        driver = driver
+                .withInput(new LongWritable(1), new Text(s1))
+                .withInput(new LongWritable(2), new Text(s3));
+        
+        List<Pair<Text, IntWritable>> results = driver.run();
+        
+        assertThat(results.size(), is(1));
+        
+        Pair<Text, IntWritable> result = results.get(0);
+        assertThat(result.getFirst().toString(), is("/category/cameras"));
+        assertThat(result.getSecond().get(), is(1));
+    }
+    
+    @Test
+    public void STATUS_OK以外は除外() throws IOException {
+        driver = driver
+                .withInput(new LongWritable(1), new Text(s1))
+                .withInput(new LongWritable(2), new Text(s4));
+        
+        List<Pair<Text, IntWritable>> results = driver.run();
+        
+        assertThat(results.size(), is(1));
+        
+        Pair<Text, IntWritable> result = results.get(0);
+        assertThat(result.getFirst().toString(), is("/category/cameras"));
         assertThat(result.getSecond().get(), is(1));
     }
 }
